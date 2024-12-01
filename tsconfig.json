@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "ES2020",
+    "lib": [
+      "ES5",
+      "ES6",
+      "ESNext",
+      "DOM"
+    ],
+    "allowJs": false,
+    "checkJs": false,
+    "jsx": "react",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": false,
+    "removeComments": true,
+    "noEmit": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+  }
+}
