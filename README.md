@@ -1,9 +1,56 @@
 # Deployment Protector
 
-Protect your Next.js v15 deployments with a password. Stateless, simple JWT-based protection.
+Put a very (simple) password lock ok your Next.js v15 deployment(s).
 
-# Todos
-- [ ] Get it to build
-- [ ] Consume in an app via pnpm link
-- [ ] Configure exports properly
-- [ ] Publish
+**This will not protect you from code and content leaks by any means unlike Vercel's [own deployment protection](https://vercel.com/docs/security/deployment-protection). It's a very basic form of protection that doesn't work on infrastructure level.**
+
+I needed this because I needed to hide the contents of one of my smaller projects on a production domain as well so I decided to build something that can do the job on a very basic level.
+
+# Usage
+
+Create two environment variables to store:
+- the JWT secret (`SECRET_KEY` in the example)
+- the password that will be used to auth the users (`SECRET_PASSWORD` in the example)
+
+Consume the component in your root `layout.tsx` (or any other `layout.tsx`, for that matter):
+
+```tsx
+//...
+import DeploymentProtector from 'deployment-protector';
+//...
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <DeploymentProtector
+          secretKey={SECRET_KEY}
+          password={SECRET_PASSWORD}
+        >
+          {children}
+        </DeploymentProtector>
+      </body>
+    </html>
+  );
+}
+```
+
+## Configuration
+Check the props that are exposed on `DeploymentProtector`.
+
+## Known issues
+Weird type mismatch could happen although `DeploymentProtector` is a valid React component and you might get:
+```
+Type 'bigint' is not assignable to type 'AwaitedReactNode'.ts(2786)
+```
+I suspect this is due to typing issues in React 19 or Next.js something (see [this](https://github.com/vercel/next.js/discussions/64753) and [this](https://github.com/vercel/next.js/discussions/67365)). If you run into it just put a `@ts-expect-error` on it or open up an issue/PR if you know how to resolve this.
+
+# How it works etc
+
+Is the cookie there -yes> does it contain a valid JWT -yes> render children elements.
+If there's no valid JWT then render the password form.
+Maybe this would work better if it was implemented on a middleware level? Maybe I'll revisit it in the future and see about this.
