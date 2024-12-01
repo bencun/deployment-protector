@@ -1,8 +1,27 @@
 {
   "name": "deployment-protector",
-  "private": true,
+  "private": false,
   "version": "0.1.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bencun/deployment-protector"
+  },
+  "homepage": "https://github.com/bencun/deployment-protector",
+  "bugs": {
+    "url": "https://github.com/bencun/deployment-protector/issues"
+  },
   "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "build": "tsup",
     "lint": "eslint ."
