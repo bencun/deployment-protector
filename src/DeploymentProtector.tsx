@@ -26,8 +26,6 @@ const DefaultStyles: Record<StylableElements, CSSProperties> = {
 
 type Props = {
   children: React.ReactNode
-  secretKey: string;
-  password: string;
   // Defaults to true
   secure?: boolean;
   // Defaults to 'none' if 'secure === true', otherwise to 'lax'
@@ -42,8 +40,6 @@ type Props = {
 };
 export default async function DeploymentProtector({
   children,
-  secretKey,
-  password,
   cookieName = 'deployment-protector',
   secure = true,
   sameSite = secure ? 'none' : 'lax',
@@ -51,6 +47,7 @@ export default async function DeploymentProtector({
   styles = {},
   classNames = {},
 }: Props) {
+  'use server';
   const c = await cookies();
 
   console.log({sameSite, secure})
@@ -58,7 +55,7 @@ export default async function DeploymentProtector({
   if (c.has(cookieName)) {
     const {value} = c.get(cookieName)!;
     try {
-      const token = jwt.verify(value, secretKey);
+      const token = jwt.verify(value, process.env.DP_SECRET_KEY!);
       if (token) {
         return children;
       }
@@ -73,9 +70,9 @@ export default async function DeploymentProtector({
     const pw = formData.get('password');
     if (typeof pw === 'string') {
       const trimmedPw = pw.trim();
-      if (trimmedPw === password) {
+      if (trimmedPw === process.env.DP_PASSWORD!) {
         const c = await cookies();
-        const jwtString = jwt.sign({}, secretKey, {expiresIn: maxAge});
+        const jwtString = jwt.sign({}, process.env.DP_SECRET_KEY!, {expiresIn: maxAge});
         c.set(cookieName, jwtString, {httpOnly: true, secure, sameSite, maxAge});
       }
     }
@@ -95,11 +92,12 @@ export default async function DeploymentProtector({
     button: styles.button ??
       (classNames.button ? {} : DefaultStyles.button),
   };
+
   
   return <form action={handleSubmit} style={finalStyles.form} className={classNames.form}>
     <h1 style={finalStyles.heading} className={classNames.heading}>Deployment Protected</h1>
     <p style={finalStyles.message} className={classNames.message}>You are unauthorized</p>
-    <input style={finalStyles.input} className={classNames.input} type="text" name="password" id="password"></input>
+    <input style={finalStyles.input} className={classNames.input} type="password" name="password" id="password"></input>
     <button type="submit" style={finalStyles.button} className={classNames.button}>Submit</button>
   </form>
 }

@@ -9,8 +9,8 @@ I needed this because I needed to hide the contents of one of my smaller project
 # Usage
 
 Create two environment variables to store:
-- the JWT secret (`SECRET_KEY` in the example)
-- the password that will be used to auth the users (`SECRET_PASSWORD` in the example)
+- `DP_SECRET_KEY` - the JWT secret
+- `DP_PASSWORD` the password that will be used to auth the users
 
 Consume the component in your root `layout.tsx` (or any other `layout.tsx`, for that matter):
 
@@ -27,10 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <DeploymentProtector
-          secretKey={SECRET_KEY}
-          password={SECRET_PASSWORD}
-        >
+        <DeploymentProtector>
           {children}
         </DeploymentProtector>
       </body>
