@@ -49,8 +49,6 @@ export default async function DeploymentProtector({
 }: Props) {
   'use server';
   const c = await cookies();
-
-  console.log({sameSite, secure})
   
   if (c.has(cookieName)) {
     const {value} = c.get(cookieName)!;
