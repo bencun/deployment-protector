@@ -53,6 +53,8 @@ I suspect this is due to typing issues in React 19 or Next.js something (see [th
 
 # How it works etc
 
-Is the cookie there -yes> does it contain a valid JWT -yes> render children elements.
-If there's no valid JWT then render the password form.
+It loads up and runs a single server component that performs the followint checks:
+- is the cookie there -> yes, does it contain a valid JWT ->yes, render children elements
+- else render the login form and bind it to a server action that validates against the password and sets a JWT as a cookie
+
 Maybe this would work better if it was implemented on a middleware level? Maybe I'll revisit it in the future and see about this.
