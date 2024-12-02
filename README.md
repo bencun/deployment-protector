@@ -1,12 +1,17 @@
 # Deployment Protector
 
-Put a very (simple) password lock ok your Next.js v15 deployment(s).
+Put a very simple password lock ok your Next.js v15 deployment(s).
 
 **This will not protect you from code and content leaks by any means unlike Vercel's [own deployment protection](https://vercel.com/docs/security/deployment-protection). It's a very basic form of protection that doesn't work on infrastructure level.**
 
 I needed this because I needed to hide the contents of one of my smaller projects on a production domain as well so I decided to build something that can do the job on a very basic level.
 
 # Usage
+
+Install:
+```sh
+$ pnpm add deployment-protector
+```
 
 Create two environment variables to store:
 - `DP_SECRET_KEY` - the JWT secret
